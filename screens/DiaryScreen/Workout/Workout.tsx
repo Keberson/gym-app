@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-import { RootNavigationType } from "#types/RootNavigation/RootNavigation";
+import { RootNavigationType } from "#types/rootNavigation/rootNavigation";
 
 const Workout = () => {
     const navigation = useNavigation<RootNavigationType>();
