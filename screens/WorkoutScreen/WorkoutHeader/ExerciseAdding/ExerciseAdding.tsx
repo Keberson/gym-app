@@ -1,6 +1,9 @@
-import { CheckBox, ListItem, createTheme, ThemeProvider } from "@rneui/themed";
+import ModalContext from "#core/contexts/ModalContext";
+import Input from "#core/controls/Input/Input";
+import { CheckBox, createTheme, ThemeProvider } from "@rneui/themed";
+import { useContext, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { View, Text, StyleSheet, TextInput, ScrollView, Button } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback } from "react-native";
 
 interface FormData {
     numApproaches: string;
@@ -11,24 +14,27 @@ interface FormData {
 const WorkoutCreate = () => {
     const options = [
         { id: "1", title: "Аджуманя" },
-        { id: "2", title: "Прэсс" },
-        { id: "3", title: "Прэсс" },
-        { id: "4", title: "Прэсс" },
-        { id: "5", title: "Прэсс" },
-        { id: "6", title: "Прэсс" },
-        { id: "7", title: "Прэсс" },
-        { id: "8", title: "Прэсс" },
-        { id: "9", title: "Прэсс" },
-        { id: "10", title: "Прэсс" },
-        { id: "11", title: "Прэсс" },
-        { id: "12", title: "Прэсс" },
-        { id: "13", title: "Прэсс" },
-        { id: "14", title: "Прэсс" },
-        { id: "15", title: "Прэсс15" },
-        { id: "16", title: "Прэсс1ааааааааааааааааааааааа5" },
+        { id: "2", title: "Прэс" },
+        { id: "3", title: "Бегит" },
     ];
 
-    const { control, handleSubmit } = useForm<FormData>();
+    const { setDisableAdd, setHandleAdd } = useContext(ModalContext);
+    const {
+        watch,
+        control,
+        formState: { isValid },
+    } = useForm<FormData>();
+
+    const value = watch();
+
+    useEffect(() => {
+        setHandleAdd(() => console.log("hello"));
+    }, []);
+
+    useEffect(() => {
+        console.log(isValid, value);
+        setDisableAdd(!isValid);
+    }, [value]);
 
     return (
         <ThemeProvider theme={theme}>
@@ -39,12 +45,13 @@ const WorkoutCreate = () => {
                     <Controller
                         control={control}
                         name="numApproaches"
+                        rules={{ required: true, minLength: 1, min: 1 }}
                         render={({ field: { onChange, value } }) => (
-                            <TextInput
+                            <Input
                                 inputMode="numeric"
                                 style={styles.inputContainer}
                                 value={value}
-                                onChange={onChange}
+                                handleChange={onChange}
                             />
                         )}
                     />
@@ -55,11 +62,11 @@ const WorkoutCreate = () => {
                         control={control}
                         name="weight"
                         render={({ field: { onChange, value } }) => (
-                            <TextInput
+                            <Input
                                 inputMode="numeric"
                                 style={styles.inputContainer}
                                 value={value}
-                                onChange={onChange}
+                                handleChange={onChange}
                             />
                         )}
                     />
@@ -67,14 +74,18 @@ const WorkoutCreate = () => {
                 </View>
                 <View>
                     <Text style={styles.secondTitle}>Выбор упражнения</Text>
-                    <View style={styles.selectContainer}>
-                        <Controller
-                            control={control}
-                            name="exercise"
-                            render={({ field: { onChange, value } }) => (
-                                <>
-                                    {options.map((item) => (
-                                        <ListItem key={item.id}>
+                    <Controller
+                        control={control}
+                        name="exercise"
+                        rules={{ required: true }}
+                        render={({ field: { onChange, value } }) => (
+                            <View style={styles.selectContainer}>
+                                {options.map((item) => (
+                                    <TouchableWithoutFeedback
+                                        key={item.id}
+                                        onPress={() => onChange(item.id)}
+                                    >
+                                        <View key={item.id} style={styles.rowContent}>
                                             <CheckBox
                                                 checked={value === item.id}
                                                 onPress={() => onChange(item.id)}
@@ -83,15 +94,13 @@ const WorkoutCreate = () => {
                                                 uncheckedIcon="checkbox-blank-circle-outline"
                                                 checkedColor="#4CAF50"
                                             />
-                                            <ListItem.Content>
-                                                <ListItem.Title>{item.title}</ListItem.Title>
-                                            </ListItem.Content>
-                                        </ListItem>
-                                    ))}
-                                </>
-                            )}
-                        />
-                    </View>
+                                            <Text>{item.title}</Text>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                ))}
+                            </View>
+                        )}
+                    />
                 </View>
             </ScrollView>
         </ThemeProvider>

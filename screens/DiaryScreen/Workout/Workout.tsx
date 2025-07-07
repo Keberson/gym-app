@@ -1,21 +1,29 @@
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-import { RootNavigationType } from "#types/rootNavigation/rootNavigation";
+import { RootNavigationType } from "#types/rootNavigation";
+import { IWorkout } from "#types/workout";
 
-const Workout = () => {
+interface WorkoutProps {
+    workout: IWorkout;
+}
+
+const Workout: React.FC<WorkoutProps> = ({ workout }) => {
     const navigation = useNavigation<RootNavigationType>();
 
     const handlePress = () => {
-        navigation.navigate("Workout");
+        navigation.navigate("Workout", { id: workout.id, editMode: true });
     };
 
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={handlePress}>
-                <View>
-                    <Text>Тренировка от 05.07.25</Text>
-                    <Text>Описание</Text>
+                <View style={styles.subcontainer}>
+                    <Text style={styles.title}>
+                        Тренировка от {new Date(workout.date).toLocaleDateString()}
+                    </Text>
+                    <Text>{workout.description}</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -27,11 +35,16 @@ const styles = StyleSheet.create({
         borderColor: "#E1E1E1",
         borderRadius: 10,
         borderWidth: 1,
-        paddingTop: 10,
-        paddingLeft: 10,
-        paddingBottom: 10,
-        paddingRight: 10,
+        paddingVertical: 20,
+        paddingHorizontal: 15,
         backgroundColor: "#fff",
+    },
+    subcontainer: {
+        gap: 20,
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });
 

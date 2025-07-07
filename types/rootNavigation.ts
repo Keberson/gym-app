@@ -1,7 +1,10 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-type RootStackParamList = {
-    Workout: undefined;
+export type RootStackParamList = {
+    Workout: {
+        id?: string;
+        editMode?: boolean;
+    };
 };
 
 export type RootNavigationType = NativeStackNavigationProp<RootStackParamList>;

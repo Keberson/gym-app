@@ -1,12 +1,18 @@
+import React, { ReactNode } from "react";
+
 import ModalWrapper from "#common/wrappers/ModalWrapper/ModalWrapper";
-import { ReactNode } from "react";
+import StoreWrapper from "#common/wrappers/StoreWrapper/StoreWrapper";
 
 interface RootWrapperProps {
     children: ReactNode;
 }
 
 const RootWrapper: React.FC<RootWrapperProps> = ({ children }) => {
-    return <ModalWrapper>{children}</ModalWrapper>;
+    return (
+        <StoreWrapper>
+            <ModalWrapper>{children}</ModalWrapper>
+        </StoreWrapper>
+    );
 };
 
 export default RootWrapper;

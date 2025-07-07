@@ -4,7 +4,7 @@ import { Text } from "react-native";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import FeatherIcon from "react-native-vector-icons/Feather";
 
-import { BasicStyles } from "#types/styles/styles";
+import { BasicStyles } from "#types/styles";
 
 interface DatePickerProps {
     editMode?: boolean;

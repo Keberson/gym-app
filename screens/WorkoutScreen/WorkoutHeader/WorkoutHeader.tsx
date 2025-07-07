@@ -1,21 +1,15 @@
-import {
-    Text,
-    View,
-    StyleSheet,
-    TextInput,
-    NativeSyntheticEvent,
-    TextInputChangeEventData,
-    Button,
-} from "react-native";
+import { Text, View, StyleSheet, Button } from "react-native";
 import { Control, Controller } from "react-hook-form";
+import { useContext } from "react";
 
 import DatePicker from "#core/controls/DatePicker/DatePicker";
 import Anatomy from "#common/Anatomy/Anatomy";
 
-import { WorkoutFormData } from "#types/workout/workout";
-import { useContext } from "react";
+import { WorkoutFormData } from "#types/workout";
+
 import ModalContext from "#core/contexts/ModalContext";
-import WorkoutCreate from "./WorkoutCreate/WorkoutCreate";
+import ExerciseAdding from "./ExerciseAdding/ExerciseAdding";
+import Input from "#core/controls/Input/Input";
 
 interface WorkoutHeaderProps {
     editMode?: boolean;
@@ -27,10 +21,11 @@ const WorkoutHeader: React.FC<WorkoutHeaderProps> = ({ editMode = true, control 
 
     const onCreateExercise = () => {
         open({
-            content: <WorkoutCreate />,
+            content: <ExerciseAdding />,
             props: {
                 onRequestClose: close,
             },
+            closeable: true,
         });
     };
 
@@ -65,13 +60,10 @@ const WorkoutHeader: React.FC<WorkoutHeaderProps> = ({ editMode = true, control 
                         name="description"
                         control={control}
                         render={({ field: { onChange, value } }) => (
-                            <TextInput
+                            <Input
+                                editable={editMode}
                                 value={value}
-                                onChange={(
-                                    value: NativeSyntheticEvent<TextInputChangeEventData>
-                                ) => {
-                                    onChange(value.nativeEvent.text);
-                                }}
+                                handleChange={onChange}
                                 multiline={true}
                                 numberOfLines={3}
                                 style={{

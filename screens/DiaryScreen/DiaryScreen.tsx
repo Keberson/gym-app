@@ -1,16 +1,28 @@
-import { Button, FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+import { useAppSelector } from "#core/hooks";
+
+import { RootNavigationType } from "#types/rootNavigation";
 
 import Workout from "./Workout/Workout";
 
 const DiaryScreen = () => {
+    const navigation = useNavigation<RootNavigationType>();
+    const workouts = useAppSelector((state) => state.workout.workouts);
+
+    const handlePress = () => {
+        navigation.navigate("Workout", { editMode: true });
+    };
+
     return (
         <View style={styles.container}>
-            <Button title="Добавить тренировку" />
+            <Button title="Добавить тренировку" onPress={handlePress} />
             <FlatList
                 style={styles.listContaier}
-                data={[...Array(15)]}
-                renderItem={() => <Workout />}
-                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                data={workouts}
+                renderItem={(workoutItem) => <Workout workout={workoutItem.item} />}
+                ItemSeparatorComponent={() => <View style={styles.separator} />}
             />
         </View>
     );
@@ -24,6 +36,9 @@ const styles = StyleSheet.create({
     listContaier: {
         marginTop: 10,
         flex: 1,
+    },
+    separator: {
+        height: 10,
     },
 });
 
