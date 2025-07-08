@@ -1,22 +1,28 @@
 import { useCallback, useEffect } from "react";
 import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 
 import { useAppDispatch, useAppSelector } from "#core/hooks";
-import { addWorkout } from "#core/store";
+import { addWorkout, editWorkout } from "#core/store/slices/workouts.slice";
 import { generateWorkoutId } from "#core/utils";
 
-import { WorkoutFormData } from "#types/workout";
-import { RootStackParamList } from "#types/rootNavigation";
+import { IWorkout, WorkoutFormData } from "#types/workout";
+import { RootNavigationType, RootStackParamList } from "#types/rootNavigation";
 
 import Exercise from "./Exercise/Exercise";
 import WorkoutHeader from "./WorkoutHeader/WorkoutHeader";
 
-type WorkoutScreenProps = RootStackParamList["Workout"];
+interface WorkoutScreenProps {
+    route: RouteProp<RootStackParamList, "Workout">;
+}
 
-const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ id, editMode }) => {
+const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
+    route: {
+        params: { id, editMode },
+    },
+}) => {
     const navigation = useNavigation();
     const dispatch = useAppDispatch();
     const workouts = useAppSelector((state) => state.workout.workouts);
@@ -32,7 +38,6 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ id, editMode }) => {
               description: "",
               exercises: [],
           };
-    console.log(id, defaultValues);
     const {
         handleSubmit,
         control,
@@ -42,14 +47,21 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ id, editMode }) => {
     const onSubmit: SubmitHandler<WorkoutFormData> = useCallback(
         (data) => {
             const { workoutDate, ...otherValues } = data;
+            const body = {
+                ...otherValues,
+                date: workoutDate.toISOString(),
+            };
 
-            dispatch(
-                addWorkout({
-                    ...otherValues,
-                    id: generateWorkoutId(),
-                    date: workoutDate.toISOString(),
-                })
-            );
+            if (currentWorkout) {
+                dispatch(editWorkout({ ...body, id: currentWorkout.id }));
+            } else {
+                dispatch(
+                    addWorkout({
+                        ...body,
+                        id: generateWorkoutId(),
+                    })
+                );
+            }
 
             navigation.goBack();
         },
@@ -58,11 +70,16 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ id, editMode }) => {
 
     useEffect(() => {
         navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity onPress={handleSubmit(onSubmit)} disabled={!isValid}>
-                    <AntDesignIcon name="plus" size={32} />
-                </TouchableOpacity>
-            ),
+            headerRight: () =>
+                !currentWorkout ? (
+                    <TouchableOpacity onPress={handleSubmit(onSubmit)} disabled={!isValid}>
+                        <AntDesignIcon name="plus" size={32} />
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity onPress={handleSubmit(onSubmit)} disabled={!isValid}>
+                        <AntDesignIcon name="edit" size={32} />
+                    </TouchableOpacity>
+                ),
         });
     }, [isValid]);
 

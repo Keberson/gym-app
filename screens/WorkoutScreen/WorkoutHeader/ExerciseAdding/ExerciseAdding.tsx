@@ -21,6 +21,7 @@ const WorkoutCreate = () => {
     const { setDisableAdd, setHandleAdd } = useContext(ModalContext);
     const {
         watch,
+        handleSubmit,
         control,
         formState: { isValid },
     } = useForm<FormData>();
@@ -32,7 +33,6 @@ const WorkoutCreate = () => {
     }, []);
 
     useEffect(() => {
-        console.log(isValid, value);
         setDisableAdd(!isValid);
     }, [value]);
 

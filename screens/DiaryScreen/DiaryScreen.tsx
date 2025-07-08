@@ -11,13 +11,13 @@ const DiaryScreen = () => {
     const navigation = useNavigation<RootNavigationType>();
     const workouts = useAppSelector((state) => state.workout.workouts);
 
-    const handlePress = () => {
+    const handleAdd = () => {
         navigation.navigate("Workout", { editMode: true });
     };
 
     return (
         <View style={styles.container}>
-            <Button title="Добавить тренировку" onPress={handlePress} />
+            <Button title="Добавить тренировку" onPress={handleAdd} />
             <FlatList
                 style={styles.listContaier}
                 data={workouts}

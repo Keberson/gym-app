@@ -26,6 +26,9 @@ const workoutSlice = createSlice({
                 state.workouts[index] = { ...state.workouts[index], ...action.payload };
             }
         },
+        deleteWorkout: (state, action: PayloadAction<string>) => {
+            state.workouts = state.workouts.filter((workout) => workout.id !== action.payload);
+        },
         addExercise: (state, action: PayloadAction<IExercise>) => {
             state.exercises.push(action.payload);
         },
@@ -35,5 +38,6 @@ const workoutSlice = createSlice({
     },
 });
 
-export const { addWorkout, editWorkout, addExercise, setExercises } = workoutSlice.actions;
+export const { addWorkout, editWorkout, addExercise, setExercises, deleteWorkout } =
+    workoutSlice.actions;
 export default workoutSlice.reducer;
