@@ -42,11 +42,14 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         handleSubmit,
         control,
         formState: { isValid },
-        register,
     } = useForm<WorkoutFormData>({ defaultValues });
     const { fields, append, remove } = useFieldArray({
         control,
         name: "exercises",
+        rules: {
+            required: true,
+            minLength: 1,
+        },
     });
 
     const onSubmit: SubmitHandler<WorkoutFormData> = useCallback(
@@ -78,11 +81,11 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
             headerRight: () =>
                 !currentWorkout ? (
                     <TouchableOpacity onPress={handleSubmit(onSubmit)} disabled={!isValid}>
-                        <AntDesignIcon name="plus" size={32} />
+                        <AntDesignIcon name="plus" size={32} color={isValid ? "#000" : "#CCC"} />
                     </TouchableOpacity>
                 ) : (
                     <TouchableOpacity onPress={handleSubmit(onSubmit)} disabled={!isValid}>
-                        <AntDesignIcon name="edit" size={32} />
+                        <AntDesignIcon name="edit" size={32} color={isValid ? "#000" : "#CCC"} />
                     </TouchableOpacity>
                 ),
         });
@@ -119,6 +122,9 @@ const styles = StyleSheet.create({
         padding: 15,
         paddingBottom: 20,
         marginBottom: 15,
+    },
+    disabledButton: {
+        opacity: 0.5,
     },
 });
 
