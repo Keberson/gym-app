@@ -1,15 +1,13 @@
-import { IExercise } from "#types/exercise";
-import { IWorkout } from "#types/workout";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { IWorkout } from "#types/workout";
 
 interface WorkoutState {
     workouts: IWorkout[];
-    exercises: IExercise[];
 }
 
 const initialState: WorkoutState = {
     workouts: [],
-    exercises: [],
 };
 
 const workoutSlice = createSlice({
@@ -19,7 +17,7 @@ const workoutSlice = createSlice({
         addWorkout: (state, action: PayloadAction<IWorkout>) => {
             state.workouts.push(action.payload);
         },
-        editWorkout: (state, action: PayloadAction<IWorkout>) => {
+        editWorkout: (state, action: PayloadAction<Partial<IWorkout> & Pick<IWorkout, "id">>) => {
             const index = state.workouts.findIndex((item) => item.id === action.payload.id);
 
             if (index !== -1) {
@@ -29,15 +27,8 @@ const workoutSlice = createSlice({
         deleteWorkout: (state, action: PayloadAction<string>) => {
             state.workouts = state.workouts.filter((workout) => workout.id !== action.payload);
         },
-        addExercise: (state, action: PayloadAction<IExercise>) => {
-            state.exercises.push(action.payload);
-        },
-        setExercises: (state, action: PayloadAction<IExercise[]>) => {
-            state.exercises = action.payload;
-        },
     },
 });
 
-export const { addWorkout, editWorkout, addExercise, setExercises, deleteWorkout } =
-    workoutSlice.actions;
+export const { addWorkout, editWorkout, deleteWorkout } = workoutSlice.actions;
 export default workoutSlice.reducer;

@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 
 import { useAppDispatch } from "#core/hooks";
-import { deleteWorkout } from "#core/store/slices/workouts.slice";
+import { deleteWorkout } from "#core/store/workout/workouts.slice";
 
 import { RootNavigationType } from "#types/rootNavigation";
 import { IWorkout } from "#types/workout";

@@ -1,15 +1,16 @@
 import { useCallback, useEffect } from "react";
 import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 
 import { useAppDispatch, useAppSelector } from "#core/hooks";
-import { addWorkout, editWorkout } from "#core/store/slices/workouts.slice";
+import { addWorkout, editWorkout } from "#core/store/workout/workouts.slice";
+import { selectWorkoutById } from "#core/store/workout/workout.selector";
 import { generateWorkoutId } from "#core/utils";
 
-import { IWorkout, WorkoutFormData } from "#types/workout";
-import { RootNavigationType, RootStackParamList } from "#types/rootNavigation";
+import { WorkoutFormData } from "#types/workout";
+import { RootStackParamList } from "#types/rootNavigation";
 
 import Exercise from "./Exercise/Exercise";
 import WorkoutHeader from "./WorkoutHeader/WorkoutHeader";
@@ -25,8 +26,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 }) => {
     const navigation = useNavigation();
     const dispatch = useAppDispatch();
-    const workouts = useAppSelector((state) => state.workout.workouts);
-    const currentWorkout = id ? workouts.find((workout) => workout.id === id) : undefined;
+    const currentWorkout = id ? useAppSelector((state) => selectWorkoutById(state, id)) : undefined;
     const defaultValues = currentWorkout
         ? {
               workoutDate: new Date(currentWorkout.date),
@@ -42,7 +42,12 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
         handleSubmit,
         control,
         formState: { isValid },
+        register,
     } = useForm<WorkoutFormData>({ defaultValues });
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "exercises",
+    });
 
     const onSubmit: SubmitHandler<WorkoutFormData> = useCallback(
         (data) => {
@@ -85,11 +90,24 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({
 
     return (
         <FlatList
-            data={[...Array(1)]}
-            renderItem={() => (
-                <Exercise exercise={"Аджуманя"} sets={"2-3"} weight={"10"} notes={"ПримечаниеЮл"} />
+            data={fields}
+            renderItem={({ item, index }) => (
+                <Exercise
+                    exerciseId={item.exerciseId}
+                    sets={item.numApproaches}
+                    weight={item.weight}
+                    remove={remove}
+                    index={index}
+                />
             )}
-            ListHeaderComponent={<WorkoutHeader editMode={editMode} control={control} />}
+            ListHeaderComponent={
+                <WorkoutHeader
+                    editMode={editMode}
+                    control={control}
+                    selected={fields}
+                    append={append}
+                />
+            }
             contentContainerStyle={styles.container}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         />

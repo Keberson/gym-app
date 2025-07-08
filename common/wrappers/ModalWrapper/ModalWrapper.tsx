@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, useMemo, useCallback } from "react";
+import React, { ReactNode, useState, useMemo, useCallback, useEffect } from "react";
 import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Icon } from "@rneui/themed";
 
@@ -65,7 +65,7 @@ const ModalProvider = ({ children }: { children: ReactNode }) => {
             <Modal visible={isVisible} {...modalProps}>
                 {content}
                 <View style={styles.buttonsContainer}>
-                    {true && (
+                    {addHandler && (
                         <TouchableOpacity
                             style={[
                                 styles.button,
@@ -128,6 +128,8 @@ const styles = StyleSheet.create({
         height: 80,
         position: "absolute",
         bottom: 0,
+        left: 0,
+        right: 0,
     },
 });
 

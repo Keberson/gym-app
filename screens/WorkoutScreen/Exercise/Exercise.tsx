@@ -1,17 +1,34 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import AntDesignIcon from "react-native-vector-icons/AntDesign";
+import { UseFieldArrayRemove } from "react-hook-form";
+
+import { useAppSelector } from "#core/hooks";
+import { selectExerciseById } from "#core/store/knowledges/knowledges.selector";
 
 interface ExerciseProps {
-    exercise: string;
+    exerciseId: string;
     sets: string;
     weight?: string;
-    notes: string;
+    remove: UseFieldArrayRemove;
+    index: number;
 }
 
-const Exercise: React.FC<ExerciseProps> = ({ exercise, sets, weight, notes }) => {
+const Exercise: React.FC<ExerciseProps> = ({ exerciseId, sets, weight, remove, index }) => {
+    const exercise = useAppSelector((state) => selectExerciseById(state, exerciseId));
+
+    const handleDelete = () => {
+        remove(index);
+    };
+
     return (
         <TouchableOpacity style={styles.card}>
-            <Text style={styles.exerciseName}>{exercise}</Text>
+            <View style={styles.row}>
+                <Text style={styles.exerciseName}>{exercise?.name ?? "-"}</Text>
+                <TouchableOpacity onPress={handleDelete}>
+                    <AntDesignIcon name="close" size={28} />
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.detailsRow}>
                 <Text style={styles.detailLabel}>
@@ -23,7 +40,7 @@ const Exercise: React.FC<ExerciseProps> = ({ exercise, sets, weight, notes }) =>
                 </Text>
             </View>
 
-            {notes && <Text style={styles.notes}>📝 {notes}</Text>}
+            <Text style={styles.notes}>📝 {exercise?.description}</Text>
         </TouchableOpacity>
     );
 };
@@ -44,6 +61,12 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         marginBottom: 8,
         color: "#333",
+    },
+    row: {
+        flexDirection: "row",
+        gap: 10,
+        justifyContent: "space-between",
+        alignItems: "center",
     },
     detailsRow: {
         flexDirection: "row",

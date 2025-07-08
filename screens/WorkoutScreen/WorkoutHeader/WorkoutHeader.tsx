@@ -1,27 +1,46 @@
 import { Text, View, StyleSheet, Button } from "react-native";
-import { Control, Controller } from "react-hook-form";
+import {
+    Control,
+    Controller,
+    ControllerFieldState,
+    ControllerRenderProps,
+    UseFieldArrayAppend,
+    UseFormStateReturn,
+} from "react-hook-form";
 import { useContext } from "react";
 
-import DatePicker from "#core/controls/DatePicker/DatePicker";
+import DatePicker from "#common/controls/DatePicker/DatePicker";
+import Input from "#common/controls/Input/Input";
+import ModalContext from "#core/contexts/ModalContext";
+import { useAppSelector } from "#core/hooks";
+import { selectExercisesByIds } from "#core/store/knowledges/knowledges.selector";
+
 import Anatomy from "#common/Anatomy/Anatomy";
 
 import { WorkoutFormData } from "#types/workout";
+import { IExercise } from "#types/exercise";
 
-import ModalContext from "#core/contexts/ModalContext";
 import ExerciseAdding from "./ExerciseAdding/ExerciseAdding";
-import Input from "#core/controls/Input/Input";
 
 interface WorkoutHeaderProps {
     editMode?: boolean;
     control: Control<WorkoutFormData, any, WorkoutFormData>;
+    selected: IExercise[];
+    append: UseFieldArrayAppend<WorkoutFormData, "exercises">;
 }
 
-const WorkoutHeader: React.FC<WorkoutHeaderProps> = ({ editMode = true, control }) => {
+const WorkoutHeader: React.FC<WorkoutHeaderProps> = ({
+    editMode = true,
+    control,
+    selected,
+    append,
+}) => {
     const { open, close } = useContext(ModalContext);
+    const exercises = useAppSelector((state) => selectExercisesByIds(state, selected));
 
     const onCreateExercise = () => {
         open({
-            content: <ExerciseAdding />,
+            content: <ExerciseAdding append={append} selected={selected} />,
             props: {
                 onRequestClose: close,
             },
@@ -76,11 +95,8 @@ const WorkoutHeader: React.FC<WorkoutHeaderProps> = ({ editMode = true, control 
                     />
                 </View>
                 <Anatomy
-                    data={[
-                        { slug: "chest", intensity: 1 },
-                        { slug: "biceps", intensity: 2 },
-                    ]}
-                    colors={["red", "orange", "yellow"]}
+                    data={exercises.flatMap((exercise) => exercise.bodyParts)}
+                    colors={["green", "orange", "red"]}
                 />
             </View>
             <Text style={styles.exercisesTitle}>Список упражнений</Text>

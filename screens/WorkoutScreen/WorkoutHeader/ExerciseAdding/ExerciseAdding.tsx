@@ -1,23 +1,31 @@
-import ModalContext from "#core/contexts/ModalContext";
-import Input from "#core/controls/Input/Input";
-import { CheckBox, createTheme, ThemeProvider } from "@rneui/themed";
 import { useContext, useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, UseFieldArrayAppend, useForm } from "react-hook-form";
 import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback } from "react-native";
+import { CheckBox, createTheme, ThemeProvider } from "@rneui/themed";
+
+import ModalContext from "#core/contexts/ModalContext";
+import { useAppSelector } from "#core/hooks";
+import { selectExercisesWithoutSelected } from "#core/store/knowledges/knowledges.selector";
+import generateExercisetId from "#core/utils/generateExerciseId/generateExercisetId";
+
+import Input from "#common/controls/Input/Input";
+
+import { WorkoutFormData } from "#types/workout";
+import { IExercise } from "#types/exercise";
 
 interface FormData {
     numApproaches: string;
     weight: string;
-    exercise: string;
+    exerciseId: string;
 }
 
-const WorkoutCreate = () => {
-    const options = [
-        { id: "1", title: "Аджуманя" },
-        { id: "2", title: "Прэс" },
-        { id: "3", title: "Бегит" },
-    ];
+interface ExerciseAddingProps {
+    append: UseFieldArrayAppend<WorkoutFormData, "exercises">;
+    selected: IExercise[];
+}
 
+const ExerciseAdding: React.FC<ExerciseAddingProps> = ({ append, selected }) => {
+    const exercises = useAppSelector((state) => selectExercisesWithoutSelected(state, selected));
     const { setDisableAdd, setHandleAdd } = useContext(ModalContext);
     const {
         watch,
@@ -25,11 +33,17 @@ const WorkoutCreate = () => {
         control,
         formState: { isValid },
     } = useForm<FormData>();
+    const { close } = useContext(ModalContext);
 
     const value = watch();
 
     useEffect(() => {
-        setHandleAdd(() => console.log("hello"));
+        setHandleAdd(
+            handleSubmit((formData) => {
+                append({ ...formData, id: generateExercisetId() });
+                close();
+            })
+        );
     }, []);
 
     useEffect(() => {
@@ -76,11 +90,11 @@ const WorkoutCreate = () => {
                     <Text style={styles.secondTitle}>Выбор упражнения</Text>
                     <Controller
                         control={control}
-                        name="exercise"
+                        name="exerciseId"
                         rules={{ required: true }}
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.selectContainer}>
-                                {options.map((item) => (
+                                {exercises.map((item) => (
                                     <TouchableWithoutFeedback
                                         key={item.id}
                                         onPress={() => onChange(item.id)}
@@ -94,7 +108,7 @@ const WorkoutCreate = () => {
                                                 uncheckedIcon="checkbox-blank-circle-outline"
                                                 checkedColor="#4CAF50"
                                             />
-                                            <Text>{item.title}</Text>
+                                            <Text>{item.name}</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                 ))}
@@ -157,4 +171,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default WorkoutCreate;
+export default ExerciseAdding;
