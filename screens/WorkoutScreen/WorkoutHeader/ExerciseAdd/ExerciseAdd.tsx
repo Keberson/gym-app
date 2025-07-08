@@ -19,12 +19,12 @@ interface FormData {
     exerciseId: string;
 }
 
-interface ExerciseAddingProps {
+interface ExerciseAddProps {
     append: UseFieldArrayAppend<WorkoutFormData, "exercises">;
     selected: IExercise[];
 }
 
-const ExerciseAdding: React.FC<ExerciseAddingProps> = ({ append, selected }) => {
+const ExerciseAdd: React.FC<ExerciseAddProps> = ({ append, selected }) => {
     const exercises = useAppSelector((state) => selectExercisesWithoutSelected(state, selected));
     const { setDisableAdd, setHandleAdd } = useContext(ModalContext);
     const {
@@ -171,4 +171,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ExerciseAdding;
+export default ExerciseAdd;

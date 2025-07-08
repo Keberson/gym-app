@@ -1,12 +1,5 @@
 import { Text, View, StyleSheet, Button } from "react-native";
-import {
-    Control,
-    Controller,
-    ControllerFieldState,
-    ControllerRenderProps,
-    UseFieldArrayAppend,
-    UseFormStateReturn,
-} from "react-hook-form";
+import { Control, Controller, UseFieldArrayAppend } from "react-hook-form";
 import { useContext } from "react";
 
 import DatePicker from "#common/controls/DatePicker/DatePicker";
@@ -20,7 +13,7 @@ import Anatomy from "#common/Anatomy/Anatomy";
 import { WorkoutFormData } from "#types/workout";
 import { IExercise } from "#types/exercise";
 
-import ExerciseAdding from "./ExerciseAdding/ExerciseAdding";
+import ExerciseAdd from "./ExerciseAdd/ExerciseAdd";
 
 interface WorkoutHeaderProps {
     editMode?: boolean;
@@ -40,7 +33,7 @@ const WorkoutHeader: React.FC<WorkoutHeaderProps> = ({
 
     const onCreateExercise = () => {
         open({
-            content: <ExerciseAdding append={append} selected={selected} />,
+            content: <ExerciseAdd append={append} selected={selected} />,
             props: {
                 onRequestClose: close,
             },

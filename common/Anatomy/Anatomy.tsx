@@ -23,7 +23,7 @@ const Anatomy: React.FC<AnatomyProps> = ({
                 data={transformedData}
                 gender={gender}
                 side="front"
-                scale={0.75}
+                scale={0.9}
                 border="#dfdfdf"
                 colors={colors}
             />
@@ -31,7 +31,7 @@ const Anatomy: React.FC<AnatomyProps> = ({
                 data={transformedData}
                 gender={gender}
                 side="back"
-                scale={0.75}
+                scale={0.9}
                 border="#dfdfdf"
                 colors={colors}
             />
