@@ -2,7 +2,7 @@ import { View, StyleSheet } from "react-native";
 import Body from "react-native-body-highlighter";
 
 import { IMuscleLoad } from "#types/exercise";
-import { calculateIntesity } from "#core/utils/calculateIntesity/calculateIntesity";
+import { calculateIntensity } from "#core/utils/calculateIntesity/calculateIntesity";
 
 interface AnatomyProps {
     gender?: "male" | "female";
@@ -12,10 +12,10 @@ interface AnatomyProps {
 
 const Anatomy: React.FC<AnatomyProps> = ({
     gender = "male",
-    colors = ["red", "orange", "yellow"],
+    colors = ["green", "orange", "red"],
     data = [],
 }) => {
-    const transformedData = calculateIntesity(data);
+    const transformedData = calculateIntensity(data);
 
     return (
         <View style={styles.bodyContainer}>

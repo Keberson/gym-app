@@ -22,8 +22,11 @@ const knowledgesSlice = createSlice({
         setExercises: (state, action: PayloadAction<IKnowledgeExercise[]>) => {
             state.exercises = action.payload;
         },
+        deleteExercise: (state, action: PayloadAction<string>) => {
+            state.exercises = state.exercises.filter((exercise) => exercise.id !== action.payload);
+        },
     },
 });
 
-export const { setExercises, addExercise } = knowledgesSlice.actions;
+export const { setExercises, addExercise, deleteExercise } = knowledgesSlice.actions;
 export default knowledgesSlice.reducer;

@@ -10,7 +10,7 @@ import { selectWorkoutById } from "#core/store/workout/workout.selector";
 import { generateWorkoutId } from "#core/utils";
 
 import { WorkoutFormData } from "#types/workout";
-import { RootStackParamList } from "#types/rootNavigation";
+import { RootStackParamList } from "#types/navigation";
 
 import Exercise from "./Exercise/Exercise";
 import WorkoutHeader from "./WorkoutHeader/WorkoutHeader";

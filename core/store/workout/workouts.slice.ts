@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { IWorkout } from "#types/workout";
 
+import { deleteExercise } from "../knowledges/knowledges.slice";
+
 interface WorkoutState {
     workouts: IWorkout[];
 }
@@ -27,6 +29,16 @@ const workoutSlice = createSlice({
         deleteWorkout: (state, action: PayloadAction<string>) => {
             state.workouts = state.workouts.filter((workout) => workout.id !== action.payload);
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(deleteExercise, (state, action: PayloadAction<string>) => {
+            state.workouts = state.workouts
+                .map((workout) => ({
+                    ...workout,
+                    exercises: workout.exercises.filter((ex) => ex.exerciseId !== action.payload),
+                }))
+                .filter((workout) => workout.exercises.length > 0);
+        });
     },
 });
 

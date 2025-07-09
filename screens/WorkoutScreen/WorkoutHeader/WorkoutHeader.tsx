@@ -75,7 +75,7 @@ const WorkoutHeader: React.FC<WorkoutHeaderProps> = ({
                             <Input
                                 editable={editMode}
                                 value={value}
-                                handleChange={onChange}
+                                onChange={onChange}
                                 multiline={true}
                                 numberOfLines={3}
                                 style={{
@@ -87,10 +87,7 @@ const WorkoutHeader: React.FC<WorkoutHeaderProps> = ({
                         )}
                     />
                 </View>
-                <Anatomy
-                    data={exercises.flatMap((exercise) => exercise.bodyParts)}
-                    colors={["green", "orange", "red"]}
-                />
+                <Anatomy data={exercises.flatMap((exercise) => exercise.bodyParts)} />
             </View>
             <Text style={styles.exercisesTitle}>Список упражнений</Text>
             {editMode && (

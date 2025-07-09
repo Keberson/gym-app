@@ -6,7 +6,7 @@ import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { useAppDispatch } from "#core/hooks";
 import { deleteWorkout } from "#core/store/workout/workouts.slice";
 
-import { RootNavigationType } from "#types/rootNavigation";
+import { RootNavigationType } from "#types/navigation";
 import { IWorkout } from "#types/workout";
 
 interface WorkoutProps {

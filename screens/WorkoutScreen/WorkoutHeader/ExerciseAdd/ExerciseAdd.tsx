@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Controller, UseFieldArrayAppend, useForm } from "react-hook-form";
-import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback } from "react-native";
-import { CheckBox, createTheme, ThemeProvider } from "@rneui/themed";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { createTheme, ThemeProvider } from "@rneui/themed";
 
 import ModalContext from "#core/contexts/ModalContext";
 import { useAppSelector } from "#core/hooks";
@@ -12,6 +12,7 @@ import Input from "#common/controls/Input/Input";
 
 import { WorkoutFormData } from "#types/workout";
 import { IExercise } from "#types/exercise";
+import Checkbox from "#common/controls/Checkbox/Checkbox";
 
 interface FormData {
     numApproaches: string;
@@ -65,7 +66,7 @@ const ExerciseAdd: React.FC<ExerciseAddProps> = ({ append, selected }) => {
                                 inputMode="numeric"
                                 style={styles.inputContainer}
                                 value={value}
-                                handleChange={onChange}
+                                onChange={onChange}
                             />
                         )}
                     />
@@ -80,7 +81,7 @@ const ExerciseAdd: React.FC<ExerciseAddProps> = ({ append, selected }) => {
                                 inputMode="numeric"
                                 style={styles.inputContainer}
                                 value={value}
-                                handleChange={onChange}
+                                onChange={onChange}
                             />
                         )}
                     />
@@ -95,22 +96,13 @@ const ExerciseAdd: React.FC<ExerciseAddProps> = ({ append, selected }) => {
                         render={({ field: { onChange, value } }) => (
                             <View style={styles.selectContainer}>
                                 {exercises.map((item) => (
-                                    <TouchableWithoutFeedback
+                                    <Checkbox
                                         key={item.id}
-                                        onPress={() => onChange(item.id)}
-                                    >
-                                        <View key={item.id} style={styles.rowContent}>
-                                            <CheckBox
-                                                checked={value === item.id}
-                                                onPress={() => onChange(item.id)}
-                                                iconType="material-community"
-                                                checkedIcon="checkbox-marked-circle"
-                                                uncheckedIcon="checkbox-blank-circle-outline"
-                                                checkedColor="#4CAF50"
-                                            />
-                                            <Text>{item.name}</Text>
-                                        </View>
-                                    </TouchableWithoutFeedback>
+                                        title={item.name}
+                                        id={item.id}
+                                        value={value === item.id}
+                                        onChange={onChange}
+                                    />
                                 ))}
                             </View>
                         )}

@@ -5,6 +5,9 @@ export type RootStackParamList = {
         id?: string;
         editMode?: boolean;
     };
+    Exercise: {
+        id: string;
+    };
 };
 
 export type RootNavigationType = NativeStackNavigationProp<RootStackParamList>;

@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { useAppSelector } from "#core/hooks";
 
-import { RootNavigationType } from "#types/rootNavigation";
+import { RootNavigationType } from "#types/navigation";
 
 import Workout from "./Workout/Workout";
 

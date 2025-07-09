@@ -1,5 +1,5 @@
-import React, { ReactNode, useState, useMemo, useCallback, useEffect } from "react";
-import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { ReactNode, useState, useMemo, useCallback } from "react";
+import { Modal, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Icon } from "@rneui/themed";
 
 import ModalContext, { IModalConfig } from "#core/contexts/ModalContext";
@@ -45,53 +45,60 @@ const ModalProvider = ({ children }: { children: ReactNode }) => {
             open: openModal,
             close: closeModal,
             setHandleAdd: (handler: (() => void) | undefined) => {
-                if (handler !== addHandler) {
-                    setAddHandler(() => handler);
-                }
+                setAddHandler(() => handler);
             },
             setHandleClose: (handler: (() => void) | undefined) => {
-                if (handler !== closeHandler) {
-                    setCloseHandler(() => handler);
-                }
+                setCloseHandler(() => handler);
             },
             setDisableAdd: setIsAddDisabled,
         }),
-        [openModal, closeModal, addHandler, closeHandler]
+        [openModal, closeModal]
     );
+
+    const hasButtons = addHandler || isCloseable;
+
+    const contentContainerStyle: ViewStyle = {
+        flex: 1,
+        paddingBottom: hasButtons ? 80 : 0,
+    };
 
     return (
         <ModalContext.Provider value={contextValue}>
             {children}
             <Modal visible={isVisible} {...modalProps}>
-                {content}
-                <View style={styles.buttonsContainer}>
-                    {addHandler && (
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                styles.addButton,
-                                isAddDisabled && styles.disabledButton,
-                            ]}
-                            onPress={handleAddPress}
-                            activeOpacity={0.7}
-                        >
-                            <Icon
-                                name="add"
-                                type="material"
-                                color={isAddDisabled ? "#CCCCCC" : "white"}
-                                size={32}
-                            />
-                        </TouchableOpacity>
-                    )}
-                    {isCloseable && (
-                        <TouchableOpacity
-                            style={[styles.button, styles.closeButton]}
-                            onPress={handleClosePress}
-                        >
-                            <Icon name="close" type="material" color="white" size={32} />
-                        </TouchableOpacity>
-                    )}
-                </View>
+                <View style={contentContainerStyle}>{content}</View>
+                {hasButtons && (
+                    <View style={styles.buttonsContainer}>
+                        {addHandler && (
+                            <TouchableOpacity
+                                style={[
+                                    styles.button,
+                                    styles.addButton,
+                                    isAddDisabled && styles.disabledButton,
+                                ]}
+                                onPress={handleAddPress}
+                                activeOpacity={0.7}
+                                disabled={isAddDisabled}
+                            >
+                                <Icon
+                                    name="add"
+                                    type="material"
+                                    color={isAddDisabled ? "#CCCCCC" : "white"}
+                                    size={32}
+                                />
+                            </TouchableOpacity>
+                        )}
+                        {isCloseable && (
+                            <TouchableOpacity
+                                style={[styles.button, styles.closeButton]}
+                                onPress={handleClosePress}
+                                activeOpacity={0.7}
+                            >
+                                <Icon name="close" type="material" color="white" size={32} />
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                )}
             </Modal>
         </ModalContext.Provider>
     );
@@ -112,12 +119,10 @@ const styles = StyleSheet.create({
     addButton: {
         position: "absolute",
         right: 20,
-        bottom: 20,
         backgroundColor: "#007AFF",
     },
     closeButton: {
         position: "absolute",
-        bottom: 20,
         left: 20,
         backgroundColor: "#A8A8A8",
     },
@@ -126,10 +131,12 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         height: 80,
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "transparent",
         position: "absolute",
         bottom: 0,
-        left: 0,
-        right: 0,
     },
 });
 

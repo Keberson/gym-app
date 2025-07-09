@@ -6,15 +6,15 @@ import {
 } from "react-native";
 
 interface InputProps extends TextInputProps {
-    handleChange: (value: string) => void;
+    onChange: (value: string) => void;
 }
 
-const Input: React.FC<InputProps> = ({ handleChange, ...props }) => {
+const Input: React.FC<InputProps> = ({ onChange, ...props }) => {
     return (
         <TextInput
             {...props}
             onChange={(e: NativeSyntheticEvent<TextInputChangeEventData>) =>
-                handleChange(e.nativeEvent.text)
+                onChange(e.nativeEvent.text)
             }
         />
     );
