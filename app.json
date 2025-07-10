@@ -12,16 +12,6 @@
             "resizeMode": "contain",
             "backgroundColor": "#ffffff"
         },
-        "plugins": [
-            [
-                "expo-firebase-core",
-                {
-                    "android": {
-                        "googleServicesFile": "./google-services.json"
-                    }
-                }
-            ]
-        ],
         "ios": {
             "supportsTablet": true
         },
@@ -31,7 +21,8 @@
                 "backgroundColor": "#ffffff"
             },
             "edgeToEdgeEnabled": true,
-            "package": "com.keberson.gymapp"
+            "package": "com.keberson.gymapp",
+            "googleServicesFile": "./google-services.json"
         },
         "web": {
             "favicon": "./assets/favicon.png"
@@ -40,6 +31,11 @@
             "eas": {
                 "projectId": "5aa4fe02-557b-4829-a24a-a34321552a0f"
             }
-        }
+        },
+        "plugins": [
+            "@react-native-firebase/app",
+            "@react-native-firebase/auth",
+            "@react-native-firebase/crashlytics"
+        ]
     }
 }
