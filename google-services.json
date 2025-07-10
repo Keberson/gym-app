@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "208802533482",
+    "project_id": "gym-app-6a0c1",
+    "storage_bucket": "gym-app-6a0c1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208802533482:android:0e790641900c0a10697a13",
+        "android_client_info": {
+          "package_name": "com.keberson.gymapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTHYXFOTDdimhJ1Mzz1G0qYD1dd9tJ5Y0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
